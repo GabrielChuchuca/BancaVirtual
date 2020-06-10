@@ -17,6 +17,10 @@ if ($usurol == 'usuario') {
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
     $nombres = $row["per_nombre"];
+    $apellidos = $row["per_apellido"];
+
+    echo $nombres;
+    echo $apellidos;
     ?>
 
     <head>
@@ -165,9 +169,21 @@ if ($usurol == 'usuario') {
         <!--Slider-->
         <br>
         <br>
-        <br>
-        <br>
-        <br>
+        <?php
+    include '../../../config/conexionBD.php';
+    $sql0 = "SELECT * FROM bv_cliente WHERE cli_persona='$codigoui';";
+    $result1 = $conn->query($sql0);
+    $row = $result1->fetch_assoc();
+    $id = $row["cli_id"];
+    $sql6 = "SELECT * FROM bv_cuenta WHERE cli_id='$id';";
+    $result2 = $conn->query($sql6);
+    $row = $result2->fetch_assoc();
+    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
+    $saldo = $row["cue_saldo"];
+    echo "#Cuenta" . $cuenta;
+    echo "---------------------";
+    echo "Saldo Actual" . $saldo;
+    ?>
 
 
 
