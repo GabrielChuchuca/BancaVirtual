@@ -16,7 +16,16 @@ if ($usurol == 'empleado') {
     $sqlu = "SELECT * FROM bv_persona WHERE per_id='$codigoui';";
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
+    echo $codigoui;
     $nombres = $row["per_nombre"];
+    $apellidos = $row["per_apellido"];
+    echo "Cajero/a: " . $nombres . " " . $apellidos;
+    $sqluu = "SELECT * FROM bv_empleado WHERE emp_persona='$codigoui';";
+    $resultuu = $conn->query($sqluu);
+    $row = $resultuu->fetch_assoc();
+    $codigoempleado = $row["emp_id"];
+    //echo $codigoempleado;
+
     ?>
 
     <head>
@@ -151,6 +160,7 @@ if ($usurol == 'empleado') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
+                        <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
                             <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 
                         </ul>
@@ -166,6 +176,7 @@ if ($usurol == 'empleado') {
         <br>
         <br>
         <br>
+
         <br>
         <br>
 
@@ -177,16 +188,15 @@ if ($usurol == 'empleado') {
                 <div class="center gap">
                     <table id="tbl">
                         <caption>
-                            <h4>Cuenta de Empleado</h4>
+                            <h4>Lista de Usuarios</h4>
                         </caption>
-                        <!-- <tr>
-                            <th># Cuenta</th>
-                            <th>Propietario</th>
-                            <th>Fecha ultima transaccion</th>
-                            <th>saldo</th>
-                        </tr>-->
+                        <tr>
+                            <th># CUENTA</th>
+                            <th>PROPIETARIO</th>
+                            <th>SALDO ACTUAL</th>
+                        </tr>
                         <?php
-                        /*$sql = "SELECT * FROM bv_persona WHERE NOt per_rol='admin';";
+                        $sql = "SELECT * FROM bv_persona where per_rol='usuario';";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
@@ -195,17 +205,36 @@ if ($usurol == 'empleado') {
                                 $nombres = $row["per_nombre"];
                                 $apellidos = $row["per_apellido"];
                                 $direccion = $row["per_direccion"];
-                                $telefono = $row["per_telefono"];
+                                $sql2 = "SELECT * FROM bv_cliente where cli_persona='$codigo';";
+                                $result2 = $conn->query($sql2);
+                                if ($result2->num_rows > 0) {
+                                    while ($row = $result2->fetch_assoc()) {
+                                        $codigocliente = $row["cli_id"];
+                                        $sql3 = "SELECT * FROM bv_cuenta where cli_id='$codigocliente';";
+                                        $result3 = $conn->query($sql3);
+                                            if ($result3->num_rows > 0) {
+                                                while ($row = $result3->fetch_assoc()) {
+                                                    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
+                                                    $saldoactual = $row["cue_saldo"];
+                                                    echo "<tr>";
+                                                    echo " <td>" . $cuenta . "</td>";
+                                                    echo " <td>" . $nombres . " " . $apellidos. "</td>";   
+                                                    echo " <td>" . $saldoactual . "</td>";    
+                                                    echo "</tr>";
+
+                                                }
+                                            }
+
+                                    }
+                                }
+
+                                /*$telefono = $row["per_telefono"];
                                 $correo = $row["per_correo"];
                                 $fecha = $row["per_fecha_nac"];
                                 $estado = $row["per_estado_civil"];
-                                $sexo = $row["per_sexo"];
-                                echo "<tr>";
-                                echo " <td>" . $cedula . "</td>";
-                                echo " <td>" . $nombres . "</td>";
-                                echo " <td>" . $apellidos . "</td>";
-                                echo " <td>" . $direccion . "</td>";
-                                echo " <td>" . $telefono . "</td>";
+                                $sexo = $row["per_sexo"];*/
+                                
+                                /*echo " <td>" . $telefono . "</td>";
                                 echo " <td>" . $correo . "</td>";
                                 $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
                                 echo " <td>" . $fecha . "</td>";
@@ -213,15 +242,17 @@ if ($usurol == 'empleado') {
                                 echo " <td>" . $sexo . "</td>";
                                 echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
                                 echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
-                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";
-                                echo "</tr>";
+                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";*/
+                                
                             }
-                        } else {
+                        }
+                       
+                        else {
                             echo "<tr>";
                             echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
                             echo "</tr>";
                         }
-                        $conn->close();*/
+                        $conn->close();
                         ?>
                     </table>
                 </div>

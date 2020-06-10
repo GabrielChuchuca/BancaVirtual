@@ -1,5 +1,7 @@
 <?php
     include '../../../config/conexionBD.php';
+    $cocaj = $_GET["codigoempleado"];
+    echo $cocaj;
     date_default_timezone_set("America/Guayaquil");
     $fecha = date('Y-m-d H:i:s', time());
     $cedula = $_GET["cedula"];
@@ -46,7 +48,7 @@
             
             $sql2 = "UPDATE bv_cuenta SET cue_saldo = $cue_saldo WHERE cli_id = $id"; 
             $sql3 = "INSERT INTO `bv_transferencia`(`tra_fecha`, `tra_monto`, `tra_tipo`, `emp_id`, `cli_id`, `cue_ncuenta`)
-            VALUES ('$fecha','$valor','$op','$id','$id','$cue_numcuenta')";
+            VALUES ('$fecha','$valor','$op','$cocaj','$id','$cue_numcuenta')";
             
             if ($conn->query($sql3) === TRUE) { 
             } else { 
@@ -54,7 +56,8 @@
             } 
             
             if ($conn->query($sql2) === TRUE) { 
-                header ("Location: ../../vista/empleado/cajera.html");
+                echo "<a href='../../../vista/empleado/index.php'>Regresar</a>";
+                //header ("Location: ../../vista/empleado/cajera.php");
             } else { 
                 echo "Error: " . $sql2 . "<br>" . mysqli_error($conn) . "<br>"; 
                 header ("Location: nocambiosaldo.php");

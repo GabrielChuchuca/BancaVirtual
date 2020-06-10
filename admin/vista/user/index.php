@@ -175,14 +175,19 @@ if ($usurol == 'usuario') {
     $result1 = $conn->query($sql0);
     $row = $result1->fetch_assoc();
     $id = $row["cli_id"];
+
     $sql6 = "SELECT * FROM bv_cuenta WHERE cli_id='$id';";
     $result2 = $conn->query($sql6);
     $row = $result2->fetch_assoc();
     $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
     $saldo = $row["cue_saldo"];
+    
     echo "#Cuenta" . $cuenta;
     echo "---------------------";
     echo "Saldo Actual" . $saldo;
+
+    
+
     ?>
 
 
@@ -202,6 +207,45 @@ if ($usurol == 'usuario') {
                             <th>saldo</th>
                         </tr>
                         <?php
+
+                        $sql = "SELECT * FROM bv_transferencia where cue_ncuenta=$cuenta;";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $f_tran = $row["tra_fecha"];
+                                $m_tran = $row["tra_monto"];
+                                echo "<tr>";
+                                echo " <td>" . $cuenta . "</td>";
+                                echo " <td>" . $nombres . " " . $apellidos. "</td>";   
+                                echo " <td>" . $f_tran. "</td>";  
+                                echo " <td>" . $m_tran. "</td>";   
+                                echo "</tr>";
+
+                                /*$telefono = $row["per_telefono"];
+                                $correo = $row["per_correo"];
+                                $fecha = $row["per_fecha_nac"];
+                                $estado = $row["per_estado_civil"];
+                                $sexo = $row["per_sexo"];*/
+                                
+                                /*echo " <td>" . $telefono . "</td>";
+                                echo " <td>" . $correo . "</td>";
+                                $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
+                                echo " <td>" . $fecha . "</td>";
+                                echo " <td>" . $estado . "</td>";
+                                echo " <td>" . $sexo . "</td>";
+                                echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
+                                echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
+                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";*/
+                                
+                            }
+                        }
+                       
+                        else {
+                            echo "<tr>";
+                            echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
+                            echo "</tr>";
+                        }
+                        $conn->close();
                         /*$sql = "SELECT * FROM bv_persona WHERE NOt per_rol='admin';";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {

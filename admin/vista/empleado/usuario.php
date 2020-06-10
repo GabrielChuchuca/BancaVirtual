@@ -2,6 +2,7 @@
     include '../../../config/conexionBD.php';
 
     $cedula = $_GET["ced"];
+    $cocaj = $_GET["cedu"];
     $sq = "SELECT * FROM bv_persona WHERE per_cedula='$cedula'";
 
 

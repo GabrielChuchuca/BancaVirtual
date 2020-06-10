@@ -48,7 +48,7 @@
                     $sql3 = "UPDATE bv_cliente SET cli_num_login=$correctos WHERE cli_id=$codigoCliente;";
                     if ($conn->query($sql3) === TRUE) {
 
-                        $to_email = "margoalexaguirre@gmail.com";
+                        /*$to_email = "margoalexaguirre@gmail.com";
                         $subject = "Web transaccional: Inicio de sesion";
                         $body = "Se registo un ingreso al servicio Web Transaccional \nSi usted no realizo esta operacion dirijase a cualquiera de nuestras oficinas o comuniquese con nuestro Call Center
                         \nCALL CENTER: (07) 2222836\nCelular:  0986694444\nEscríbanos a: info@banquito.fin.ec";
@@ -58,7 +58,8 @@
                             header("Location: ../../admin/vista/user/index.php");
                         } else {
                             echo "Email sending failed...";
-                        }
+                        }*/
+                        header("Location: ../../admin/vista/user/index.php");
                     }
                 }
             } else {

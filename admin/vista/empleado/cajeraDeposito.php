@@ -1,7 +1,10 @@
 <?php
    include '../../../config/conexionBD.php';
+   $cocaj = $_GET["codigoempleado"];
+   echo $cocaj;
 
-   $cedula = $_GET["cedu"];
+   $cedula = $_GET["ced"];
+   echo $cedula;
    $sq = "SELECT * FROM bv_persona WHERE per_cedula='$cedula'";
 
 
