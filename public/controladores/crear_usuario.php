@@ -39,7 +39,10 @@
     $sexo = isset($_POST["sexo"]) ? mb_strtoupper(trim($_POST["sexo"]), 'UTF-8') : null;
     $pass = MD5($password);
     $codigo = 0;
+    $saldo= 0.00;
     $sql = "INSERT INTO bv_persona VALUES(null,'$cedula', '$nombres', '$apellidos', '$direccion', '$telefono','$fecha','$correo','$estado','$sexo','usuario','$pass');";
+    date_default_timezone_set("America/Guayaquil");
+    $fecha = date('Y-m-d H:i:s', time());
     if ($conn->query($sql) === TRUE) {
 
         $sql2 = "SELECT * FROM bv_persona WHERE per_cedula='$cedula';";
@@ -56,12 +59,23 @@
                     $headers = "Banquito";
 
                     if (mail($to_email, $subject, $body, $headers)) {
-                        echo "Se ha creado correctamemte";
+                        echo "Se ha creado correctamemte-";
                     } else {
                         echo "Email sending failed...";
                     }
                 }
             }
+        }
+        $sql5 = "SELECT * FROM bv_cliente where cli_persona='$codigo';";
+        $result1 = $conn->query($sql5);
+        $row = $result1->fetch_assoc();
+        $id = $row["cli_id"];
+        echo $id;
+        $sql4 = "INSERT INTO bv_cuenta VALUES(0, '$saldo', '$fecha', $id);";
+        if ($conn->query($sql4) === TRUE) {
+            echo "Con su #cuenta";
+        }else{
+            echo "error con id";
         }
     } else {
         if ($conn->errno == 1062) {
