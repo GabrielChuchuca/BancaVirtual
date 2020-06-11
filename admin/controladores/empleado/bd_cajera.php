@@ -56,8 +56,8 @@
             } 
             
             if ($conn->query($sql2) === TRUE) { 
-                echo "<a href='../../../vista/empleado/index.php'>Regresar</a>";
-                //header ("Location: ../../vista/empleado/cajera.php");
+                //echo "<a href='../../vista/empleado/index.php'>Regresar</a>";
+                header ("Location: ../../vista/empleado/index.php");
             } else { 
                 echo "Error: " . $sql2 . "<br>" . mysqli_error($conn) . "<br>"; 
                 header ("Location: nocambiosaldo.php");
