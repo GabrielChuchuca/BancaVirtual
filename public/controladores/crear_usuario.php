@@ -53,7 +53,7 @@
                 $codigo = $row["per_id"];
                 $sql3 = "INSERT INTO bv_cliente VALUES(null,0,0,$codigo);";
                 if ($conn->query($sql3) === TRUE) {
-                    $to_email = "margoalexaguirre@gmail.com";
+                    $to_email = "gabrielchuchuca27@gmail.com";
                     $subject = "Creacion de cuenta en Banquito";
                     $body = "Gracias por confiar en nosotros $nombres $apellidos, ud ha creado una cuenta en banquito, ud puede iniciar sesion con correo:$correo password:$password";
                     $headers = "Banquito";
@@ -86,6 +86,7 @@
     }
     //cerrar la base de datos
     $conn->close();
+    header ("Location: ../../index.html");
     echo "<a href='/software/BancaVirtual/index.html'>Regresar</a>";
     ?>
 </body>
