@@ -194,9 +194,16 @@ echo "<h1>N. de Cuenta: $numeroc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   $fd = $_POST["fechad"];
   $fh = $_POST["fechah"];
   echo "<br><br>";
-  $sql = "SELECT tt.tra_tipo, tt.tra_fecha ,tt.tra_monto FROM bv_persona tp, bv_cliente tc , bv_cuenta tca ,bv_transferencia tt WHERE tca.cue_ncuenta='$numeroc' and tp.per_id = tc.cli_persona and tca.cue_ncuenta = tt.cue_ncuenta and tc.cli_id = tca.cli_id and UPPER(tt.tra_tipo) = '$q' and tt.tra_fecha BETWEEN '$fd' AND '$fh' ORDER BY tt.tra_fecha DESC ;
-  ";
-
+  if($q=="TODO"){
+    $sql = "SELECT tt.tra_tipo, tt.tra_fecha ,tt.tra_monto FROM bv_persona tp, bv_cliente tc , bv_cuenta tca ,bv_transferencia tt WHERE tca.cue_ncuenta='$numeroc' and tp.per_id = tc.cli_persona and tca.cue_ncuenta = tt.cue_ncuenta and tc.cli_id = tca.cli_id ORDER BY tt.tra_fecha DESC ;
+    ";
+  
+  }else{
+    $sql = "SELECT tt.tra_tipo, tt.tra_fecha ,tt.tra_monto FROM bv_persona tp, bv_cliente tc , bv_cuenta tca ,bv_transferencia tt WHERE tca.cue_ncuenta='$numeroc' and tp.per_id = tc.cli_persona and tca.cue_ncuenta = tt.cue_ncuenta and tc.cli_id = tca.cli_id and UPPER(tt.tra_tipo) = '$q' and tt.tra_fecha BETWEEN '$fd' AND '$fh' ORDER BY tt.tra_fecha DESC ;
+    ";
+  
+  }
+  
   $result = $conn->query($sql);
   if($result->num_rows > 0){
     
