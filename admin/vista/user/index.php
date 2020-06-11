@@ -19,8 +19,6 @@ if ($usurol == 'usuario') {
     $nombres = $row["per_nombre"];
     $apellidos = $row["per_apellido"];
 
-    echo $nombres;
-    echo $apellidos;
     ?>
 
     <head>
@@ -156,9 +154,10 @@ if ($usurol == 'usuario') {
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
                         <li class="active"><a href="index.php">Inicio</a></li>
-                        <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
-                        <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>
+                       <!-- <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
+                        <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>ader-->
                         <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
+                        <li><a href="registrosaccesos.php">Consulta de registros</a></li>
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 
                         </ul>
@@ -173,6 +172,7 @@ if ($usurol == 'usuario') {
         <!--Slider-->
         <br>
         <br>
+        
         <?php
     include '../../../config/conexionBD.php';
     $sql0 = "SELECT * FROM bv_cliente WHERE cli_persona='$codigoui';";
@@ -186,9 +186,10 @@ if ($usurol == 'usuario') {
     $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
     $saldo = $row["cue_saldo"];
     
-    echo "#Cuenta" . $cuenta;
-    echo "---------------------";
-    echo "Saldo Actual" . $saldo;
+    
+    echo "<h1> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USUARIO: ".$nombres."  ".$apellidos."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#Cuenta: ".$cuenta."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saldo actual: ".$saldo." </h1>";
+    
+        
 
     
 

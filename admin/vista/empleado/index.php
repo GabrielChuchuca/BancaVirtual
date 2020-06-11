@@ -16,14 +16,14 @@ if ($usurol == 'empleado') {
     $sqlu = "SELECT * FROM bv_persona WHERE per_id='$codigoui';";
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
-    echo $codigoui;
     $nombres = $row["per_nombre"];
     $apellidos = $row["per_apellido"];
-    echo "Cajero/a: " . $nombres . " " . $apellidos;
     $sqluu = "SELECT * FROM bv_empleado WHERE emp_persona='$codigoui';";
     $resultuu = $conn->query($sqluu);
     $row = $resultuu->fetch_assoc();
     $codigoempleado = $row["emp_id"];
+    $rol = $row["emp_cargo"];
+    echo "<h1>".$rol. ": " . $nombres . " " . $apellidos."</h1>";
     //echo $codigoempleado;
 
     ?>
@@ -160,6 +160,7 @@ if ($usurol == 'empleado') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
+                        <li><a href="index.php">Inicio</a></li>
                         <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
                             <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 

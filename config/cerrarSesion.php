@@ -11,7 +11,7 @@
     session_start();
     $_SESSION['isLogged'] = FALSE;
     session_destroy();
-    header("Location: /software/BancaVirtual/index.html");  ?>
+    header("Location: ../index.html");  ?>
     ?>
 </body>
 

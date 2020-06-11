@@ -109,14 +109,14 @@
                 <a id="logo" class="pull-left" href="index.html"></a>
                 <div class="nav-collapse collapse pull-right">
                     <ul class="nav">
-                        
-                        <li class="active"><a href="index.php">Lista Usuarios</a></li>
-                        <li><a href="crear_empleado.php">Crear Empleado</a></li>
+                    <li><a href="index.php">Inicio</a></li>
+                        <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
+                          
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
                         <?php 
+
         include '../../../config/conexionBD.php';
         $codigoempleado = $_GET["codigoempleado"];
-        echo $codigoempleado;
         //$conn->close();
       ?>
                     </ul>
