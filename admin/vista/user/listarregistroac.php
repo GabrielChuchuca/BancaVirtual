@@ -17,7 +17,7 @@ if ($usurol == 'usuario') {
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
     $codigoc = $row["cli_id"];
-    $numeroc = $row["cue_ncuenta"];
+    $numeroc = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
     $nombres = $row["per_nombre"];
     $apellidos = $row["per_apellido"]
 

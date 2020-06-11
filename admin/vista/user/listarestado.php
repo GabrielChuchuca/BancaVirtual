@@ -17,13 +17,14 @@ if ($usurol == 'usuario') {
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
     $codigoc = $row["cli_id"];
-    $numeroc = $row["cue_ncuenta"];
+    $numeroc = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
     $nombres = $row["per_nombre"];
     $apellidos = $row["per_apellido"]
-
+    
     ?>
 
     <head>
+    
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>BANQUITO | Inicio</title>
@@ -210,13 +211,11 @@ echo "<h1>N. de Cuenta: $numeroc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     echo "<table style='width:100%'>
     <tr>
     <th> TIPO DE MOVIMIENTO </th>
-    <th> FECHA </th>
+    <th> FECHA Y  HORA </th>
     <th> SALDO </th>
     </tr>";
     while ($row = $result->fetch_assoc()) {
-        date_default_timezone_set("America/Guayaquil");
         $fecha = $row["tra_fecha"];
-        $fecha = date('Y-m-d');
             $tipo = $row["tra_tipo"];
             $saldo = $row["tra_monto"];
             echo "<tr>
