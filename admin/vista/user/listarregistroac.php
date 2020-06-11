@@ -5,7 +5,7 @@ $apellidosui =  explode(" ", $_SESSION['ape']);
 $codigoui = $_SESSION['cod'];
 $usurol = $_SESSION['rol'];
 if (!isset($_SESSION['isLogged']) || $_SESSION['isLogged'] === FALSE) {
-    header("Location: /software/BancaVirtual/public/vista/login.html");
+    header("Location: /examen/public/vista/login.html");
 }
 if ($usurol == 'usuario') {
 ?>
@@ -13,14 +13,15 @@ if ($usurol == 'usuario') {
     <html class="no-js">
     <?php
     include '../../../config/conexionBD.php';
-    $sqlu = "SELECT * FROM bv_persona WHERE per_id='$codigoui';";
+    $sqlu = "SELECT  tp.per_nombre per_nombre, tp.per_apellido per_apellido , tc.cli_id cli_id, tca.cue_ncuenta cue_ncuenta FROM bv_persona tp, bv_cliente tc , bv_cuenta tca ,bv_transferencia tt WHERE tp.per_id='$codigoui'  and tp.per_id = tc.cli_persona and  tc.cli_id = tca.cli_id and tca.cli_id = tt.cli_id;";
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
+    $codigoc = $row["cli_id"];
+    $numeroc = $row["cue_ncuenta"];
     $nombres = $row["per_nombre"];
-    $apellidos = $row["per_apellido"];
+    $apellidos = $row["per_apellido"]
 
-    echo $nombres;
-    echo $apellidos;
+
     ?>
 
     <head>
@@ -54,6 +55,10 @@ if ($usurol == 'usuario') {
                 //$('#modal-13').modal({ keyboard: false }).load   // initialized with no keyboard
             });
         </script>
+        <script>
+
+
+</script>
         <style>
             .contenedor-slider {
                 margin: auto;
@@ -155,12 +160,13 @@ if ($usurol == 'usuario') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
-                        <li class="active"><a href="index.php">Inicio</a></li>
+                            <li><a href="../../../index.html">Cerrar Sesion</a></li>
+                            <li class="active"><a href="../../index.html">Inicio</a></li>
                         <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
                         <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>
-                        <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
-                        <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
-
+                        <li><a href="../../solitudCredito.php">Consulte su Cuenta</a></li>
+                        <li><a href="../../registrosacceso.php">Consulta de registros</a></li>
+                        
                         </ul>
                     </div>
                     <!--/.nav-collapse -->
@@ -173,28 +179,40 @@ if ($usurol == 'usuario') {
         <!--Slider-->
         <br>
         <br>
-        <?php
-    include '../../../config/conexionBD.php';
-    $sql0 = "SELECT * FROM bv_cliente WHERE cli_persona='$codigoui';";
-    $result1 = $conn->query($sql0);
-    $row = $result1->fetch_assoc();
-    $id = $row["cli_id"];
+        <br>
+        <br>
+        <br>
 
-    $sql6 = "SELECT * FROM bv_cuenta WHERE cli_id='$id';";
-    $result2 = $conn->query($sql6);
-    $row = $result2->fetch_assoc();
-    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
-    $saldo = $row["cue_saldo"];
-    
-    echo "#Cuenta" . $cuenta;
-    echo "---------------------";
-    echo "Saldo Actual" . $saldo;
+<section>
+<?php
+echo "<h1>N. de Cuenta: $numeroc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Nombres:  $nombres&nbsp;&nbsp;$apellidos</h1>"
+        ?>
+        <script>
 
-    
+function buscar(){
+    var elemento = document.getElementById("tipo").value;
+   if(elemento == ""){
+       document.getElementById("informacion").innerHTML = "";
 
-    ?>
+   }else{
+       if(window.XMLHttpRequest){
+           xmlhttp = new XMLHttpRequest();
+       }else{
+           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       xmlhttp.onreadystatechange = function(){
+        if(this.readState == 4 && this.status == 200){
+            document.getElementById("informacion").innerHTML = this.responseText;
+        }
+       };
+       xmlhttp.open("GET","php/buscar.php?nombres="+elemento,true);
+       xmlhttp.send();
+   }
+   return false;
+}
 
 
+</script>
 
         <!--Services-->
         <section id="services" style="text-align: center">
@@ -205,89 +223,36 @@ if ($usurol == 'usuario') {
                             <h4>Cuenta de Ahorro</h4>
                         </caption>
                         <tr>
-                            <th># Cuenta</th>
-                            <th>Propietario</th>
-                            <th>Fecha ultima transaccion</th>
-                            <th>saldo</th>
+                            <th> FECHA Y HORA DE REGISTRO</th>
+                            <th>TIPO DE ACCESO</th>
                         </tr>
+                        <div id="informacion"><h2>Resultados</h2></div>
                         <?php
 
-                        $sql = "SELECT * FROM bv_transferencia where cue_ncuenta=$cuenta;";
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $f_tran = $row["tra_fecha"];
-                                $m_tran = $row["tra_monto"];
-                                echo "<tr>";
-                                echo " <td>" . $cuenta . "</td>";
-                                echo " <td>" . $nombres . " " . $apellidos. "</td>";   
-                                echo " <td>" . $f_tran. "</td>";  
-                                echo " <td>" . $m_tran. "</td>";   
-                                echo "</tr>";
+                        include '../../../config/conexionBD.php';
+                        $q = $_POST["txttipo"];
 
-                                /*$telefono = $row["per_telefono"];
-                                $correo = $row["per_correo"];
-                                $fecha = $row["per_fecha_nac"];
-                                $estado = $row["per_estado_civil"];
-                                $sexo = $row["per_sexo"];*/
-                                
-                                /*echo " <td>" . $telefono . "</td>";
-                                echo " <td>" . $correo . "</td>";
-                                $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
-                                echo " <td>" . $fecha . "</td>";
-                                echo " <td>" . $estado . "</td>";
-                                echo " <td>" . $sexo . "</td>";
-                                echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
-                                echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
-                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";*/
-                                
-                            }
-                        }
-                       
-                        else {
-                            echo "<tr>";
-                            echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
-                            echo "</tr>";
-                        }
-                        $conn->close();
-                        /*$sql = "SELECT * FROM bv_persona WHERE NOt per_rol='admin';";
+                        $sql = "SELECT tr.reac_fecha, tr.reac_tipo from bv_persona tp,bv_cliente tcl,bv_cuenta tca , bv_registrosacceso tr where tp.per_id = tcl.cli_persona and tcl.cli_id = tca.cli_id and tca.cue_ncuenta ='$numeroc' and tca.cue_ncuenta = tr.reac_cueA_id  and tr.reac_tipo='$q' ORDER BY tr.reac_fecha DESC;";
                         $result = $conn->query($sql);
+
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                $codigo = $row["per_id"];
-                                $cedula = $row["per_cedula"];
-                                $nombres = $row["per_nombre"];
-                                $apellidos = $row["per_apellido"];
-                                $direccion = $row["per_direccion"];
-                                $telefono = $row["per_telefono"];
-                                $correo = $row["per_correo"];
-                                $fecha = $row["per_fecha_nac"];
-                                $estado = $row["per_estado_civil"];
-                                $sexo = $row["per_sexo"];
+                                $fecha = $row["reac_fecha"];
+                                $tipoac = $row["reac_tipo"];
                                 echo "<tr>";
-                                echo " <td>" . $cedula . "</td>";
-                                echo " <td>" . $nombres . "</td>";
-                                echo " <td>" . $apellidos . "</td>";
-                                echo " <td>" . $direccion . "</td>";
-                                echo " <td>" . $telefono . "</td>";
-                                echo " <td>" . $correo . "</td>";
-                                $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
                                 echo " <td>" . $fecha . "</td>";
-                                echo " <td>" . $estado . "</td>";
-                                echo " <td>" . $sexo . "</td>";
-                                echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
-                                echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
-                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";
-                                echo "</tr>";
+                               
+                                echo " <td>" . $tipoac . "</td>";
                             }
                         } else {
                             echo "<tr>";
                             echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
                             echo "</tr>";
                         }
-                        $conn->close();*/
+                        $conn->close();
                         ?>
                     </table>
+                
                 </div>
 
                 <div class="row-fluid">

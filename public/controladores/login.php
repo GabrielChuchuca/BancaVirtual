@@ -18,7 +18,10 @@
     $codigoCliente = 0;
     $codigoClienteFinal = 0;
     $pass = MD5($contrasena);
+    date_default_timezone_set("America/Guayaquil");
+    $fecha = date('Y-m-d H:i:s', time());
     $sql = "SELECT * FROM bv_persona WHERE per_correo = '$usuario' and per_password = '$pass'";
+
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -45,23 +48,42 @@
                         $correctos = $row["cli_num_login"];
                     }
                     $correctos = $correctos + 1;
+                    $to_email = '';
+                    $subject ='';
+                    $body ='';
+                    $headers ='';
                     $sql3 = "UPDATE bv_cliente SET cli_num_login=$correctos WHERE cli_id=$codigoCliente;";
                     if ($conn->query($sql3) === TRUE) {
 
-                        /*$to_email = "margoalexaguirre@gmail.com";
+                        $to_email = "vinicioveletanga@gmail.com";
                         $subject = "Web transaccional: Inicio de sesion";
                         $body = "Se registo un ingreso al servicio Web Transaccional \nSi usted no realizo esta operacion dirijase a cualquiera de nuestras oficinas o comuniquese con nuestro Call Center
                         \nCALL CENTER: (07) 2222836\nCelular:  0986694444\nEscríbanos a: info@banquito.fin.ec";
                         $headers = "Banquito";
 
-                        if (mail($to_email, $subject, $body, $headers)) {
-                            header("Location: ../../admin/vista/user/index.php");
-                        } else {
-                            echo "Email sending failed...";
-                        }*/
-                        header("Location: ../../admin/vista/user/index.php");
+                       
                     }
+                    $codigoca='';
+                    echo "<h1> HOLASDSADA</h1>";
+                    $sql4 = "SELECT * from bv_persona tp,bv_cliente tcl,bv_cuenta tca where tp.per_id = tcl.cli_persona and tcl.cli_id =tca.cli_id and tp.per_correo= '$usuario';";
+                    $result1=$conn->query($sql4);
+                    $row = $result1->fetch_assoc();
+                    $codigoca = $row["cue_ncuenta"];
+                    echo "<h1> ".$codigoca."</h1>";
+
+                    $sql5 = "INSERT INTO bv_registrosacceso VALUES(0,'$fecha','EXITOSO',$codigoca);";
+                    echo "<h1> ".$fecha."</h1>";
+
+                    $result3 = $conn->query($sql5); 
+                    if (mail($to_email, $subject, $body, $headers)) {
+                        header("Location: ../../admin/vista/user/index.php");
+                    } else {
+                        echo "Email sending failed...";
+                    }
+                     echo "<h1> SE CREO EL REGISTRO</h1>";  
+                   
                 }
+            
             } else {
                 header("Location: ../../admin/vista/empleado/index.php");
             }
@@ -85,7 +107,12 @@
                     $incorrectos = $row["cli_num_inco"];
                 }
                 $incorrectos = $incorrectos + 1;
+                $to_email = '';
+                $subject ='';
+                $body ='';
+                $headers ='';
                 $sql3 = "UPDATE bv_cliente SET cli_num_inco=$incorrectos WHERE cli_id=$codigoClienteFinal;";
+                
                 if ($conn->query($sql3) === TRUE) {
 
                     $to_email = "margoalexaguirre@gmail.com";
@@ -93,6 +120,19 @@
                     $body = "Se registo un ingreso fallido al servicio Web Transaccional \nSi usted no realizo esta operacion dirijase a cualquiera de nuestras oficinas o comuniquese con nuestro Call Center
                     \nCALL CENTER: (07) 2222836\nCelular:  0986694444\nEscríbanos a: info@banquito.fin.ec";
                     $headers = "Banquito";
+
+                    $codigoca='';
+                    echo "<h1> HOLASDSADA</h1>";
+                    $sql4 = "SELECT * from bv_persona tp,bv_cliente tcl,bv_cuenta tca where tp.per_id = tcl.cli_persona and tcl.cli_id =tca.cli_id and tp.per_correo = '$usuario';";
+                    $result1=$conn->query($sql4);
+                    $row = $result1->fetch_assoc();
+                    $codigoca = $row["cue_ncuenta"];
+                    echo "<h1> ".$codigoca."</h1>";
+
+
+                    $sql5 = "INSERT INTO bv_registrosacceso VALUES(0,'$fecha','FALLIDO',$codigoca);";
+                    $result3 = $conn->query($sql5); 
+
 
                     if (mail($to_email, $subject, $body, $headers)) {
                         header("Location: ../../admin/vista/user/index.php");
