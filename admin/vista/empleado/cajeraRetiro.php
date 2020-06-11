@@ -35,6 +35,17 @@
            }
            echo "
            <p1>RETIRO</P1>
+        <label for='total'>Total</label>
+        <input type='text' id='total' name='total' value='$cue_saldo' disabled=»disabled» />
+        <br>
+        <label for='ValorRetiro'>ValorRetiro</label>
+        <input type='text' id='ValorRetiro' name='ValorRetiro' />
+        <input type='hidden' id='codigoempleado' name='codigoempleado' value='$cocaj'/>
+        <br>
+        <input type='submit' id='crear' name='crear' value='Aceptar' />
+        <a href='cajera.html'><input type='button' value='Cancelar'></a>
+        <br>
+        <input type='text' class='ocultar' name='operacion' value='retiro' />
      
        
     ";
@@ -122,19 +133,8 @@ echo "</tr>";
 $conn->close();
 */
 ?>
-<script type="text/javascript" src="../admin/js/cajera.js"></script>
-<p1>RETIRO</P1>
-        <label for='total'>Total</label>
-        <input type='text' id='total' name='total' value='<?php echo "$cue_saldo"?>' disabled=»disabled» />
-        <br>
-        <label for='ValorRetiro'>ValorRetiro</label>
-        <input type='text' id='ValorRetiro' name='ValorRetiro' />
-        <br>
 
-        <a href="../../controladores/empleado/bd_cajera.php?codigoempleado=<?php echo "$cocaj";?>&cedula=<?php echo "$cedula";?>"><input type="button" value="Aceptarrr" onclick="return retiros()" ></a>
-        
-       
-        <a href='cajera.html'><input type='button' value='Cancelar'></a>
-        <br>
-        <input type='text' class='ocultar' name='operacion' value='retiro' />
+
+
+
 

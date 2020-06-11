@@ -1,6 +1,6 @@
 <?php
    include '../../../config/conexionBD.php';
-   $cocaj = $_GET["codigoempleado"];
+   $cocaj = $_GET["cedu"];
    echo $cocaj;
 
    $cedula = $_GET["ced"];
@@ -41,10 +41,11 @@
         <br>
         <label for='ValorDeposito'>ValorDeposito</label>
         <input type='text' id='ValorDeposito' name='ValorDeposito' />
+        <input type='hidden' id='codigoempleado' name='codigoempleado' value='$cocaj'/>
 
         <br>
         <input type='submit' id='crear' name='crear' value='Aceptar' />
-        <a href='cajera.html'><input type='button' value='Cancelar'></a>
+        <a href='index.php'><input type='button' value='Cancelar'></a>
         <br>
         <input type='text' class='ocultar' name='operacion' value='deposito' />
     ";

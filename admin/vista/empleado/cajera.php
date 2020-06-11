@@ -117,7 +117,7 @@
         include '../../../config/conexionBD.php';
         $codigoempleado = $_GET["codigoempleado"];
         echo $codigoempleado;
-        $conn->close();
+        //$conn->close();
       ?>
                     </ul>
                 </div>
@@ -141,7 +141,7 @@
                     <div class=" parte1">
                         <label for="cedula">Cedula</label>
                         <input type="text" id="cedula" name="cedula" value="" />
-                        <input type="hidden" id="codigoempleado" name="codigoempleado" value="<?php echo $codigoempleado;?>" disabled />
+                        <input type="hidden" id="codigoempleado" name="codigoempleado" value="<?php echo $codigoempleado;?>"/>
                         <span id="mensajeCedula" class="error"> </span>
                         <br>
 
@@ -149,7 +149,7 @@
                             onclick="return buscarUsuario()" />
                         <br>
                         <div id="informacion"></div>
-                        <input type='button' value='Cancelar'>
+                        <a href='index.php'><input type='button' value='Volver'></a>
                         <input type="button" value="Retiro" onclick="return retiro()" />
                         <input type="button" value="Deposito" onclick="return deposito()" />
                         <div id="opcion" class="error"></div>
