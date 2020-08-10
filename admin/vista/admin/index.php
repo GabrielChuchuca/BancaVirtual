@@ -153,6 +153,7 @@ if ($usurol == 'admin') {
                         <ul class="nav">
                             <li class="active"><a href="index.php">Lista Usuarios</a></li>
                             <li><a href="crear_empleado.php">Crear Empleado</a></li>
+                            <li><a href="solicitudes.php">Creditos Solicitados</a></li>
                             <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 
                         </ul>

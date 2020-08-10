@@ -34,7 +34,7 @@
                $cue_saldo=$row["cue_saldo"];
            }
            echo "
-           <p1>RETIRO</P1>
+           <p1>RETIRO</p1>
         <label for='total'>Total</label>
         <input type='text' id='total' name='total' value='$cue_saldo' disabled=»disabled» />
         <br>
@@ -42,7 +42,8 @@
         <input type='text' id='ValorRetiro' name='ValorRetiro' />
         <input type='hidden' id='codigoempleado' name='codigoempleado' value='$cocaj'/>
         <br>
-        <input type='submit' id='crear' name='crear' value='Aceptar' />
+     
+        <input type='submit' id='crear' name='crear' value='Aceptar'/>
         <a href='cajera.html'><input type='button' value='Cancelar'></a>
         <br>
         <input type='text' class='ocultar' name='operacion' value='retiro' />

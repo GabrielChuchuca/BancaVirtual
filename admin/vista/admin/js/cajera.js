@@ -1,3 +1,15 @@
+
+
+ function validart(){
+    var mont = document.getElementById('total').value;
+    var montra = document.getElementById('ValorRetiro').value;
+    if(montra > mont){
+        alert('No se puede realisar esta transaccion');
+    }
+    alert('No se puede realisar esta transaccion');
+    return false;
+}
+
 function buscarUsuario() {
     var cedula = document.getElementById("cedula").value;
     var cocaj = document.getElementById("codigoempleado").value;

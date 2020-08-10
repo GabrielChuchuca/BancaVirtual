@@ -55,7 +55,7 @@
                     $sql3 = "UPDATE bv_cliente SET cli_num_login=$correctos WHERE cli_id=$codigoCliente;";
                     if ($conn->query($sql3) === TRUE) {
 
-                        $to_email = "vinicioveletanga@gmail.com";
+                        $to_email = "gabrielchuchuca27@gmail.com";
                         $subject = "Web transaccional: Inicio de sesion";
                         $body = "Se registo un ingreso al servicio Web Transaccional \nSi usted no realizo esta operacion dirijase a cualquiera de nuestras oficinas o comuniquese con nuestro Call Center
                         \nCALL CENTER: (07) 2222836\nCelular:  0986694444\nEscríbanos a: info@banquito.fin.ec";
@@ -81,11 +81,18 @@
                         echo "Email sending failed...";
                     }
                      echo "<h1> SE CREO EL REGISTRO</h1>";  
-                   
                 }
             
             } else {
-                header("Location: ../../admin/vista/empleado/index.php");
+                $sql1 = "SELECT * FROM bv_empleado WHERE emp_persona=$codigo";
+                $result1 = $conn->query($sql1);
+                $row = $result1->fetch_assoc();
+                $ca = $row["emp_cargo"];
+                if ($ca == "CAJERO"){
+                    header("Location: ../../admin/vista/empleado/indexcajero.php");
+                }else if($ca == "JEFE CREDITO"){
+                    header("Location: ../../admin/vista/empleado/indexjc.php");
+                }
             }
         }
     } else {
@@ -115,7 +122,7 @@
                 
                 if ($conn->query($sql3) === TRUE) {
 
-                    $to_email = "margoalexaguirre@gmail.com";
+                    $to_email = "gabrielchuchuca27@gmail.com";
                     $subject = "Web transaccional: Inicio de sesion Fallido";
                     $body = "Se registo un ingreso fallido al servicio Web Transaccional \nSi usted no realizo esta operacion dirijase a cualquiera de nuestras oficinas o comuniquese con nuestro Call Center
                     \nCALL CENTER: (07) 2222836\nCelular:  0986694444\nEscríbanos a: info@banquito.fin.ec";

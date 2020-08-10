@@ -5,26 +5,30 @@ $apellidosui =  explode(" ", $_SESSION['ape']);
 $codigoui = $_SESSION['cod'];
 $usurol = $_SESSION['rol'];
 if (!isset($_SESSION['isLogged']) || $_SESSION['isLogged'] === FALSE) {
-    header("Location: /examen/public/vista/login.html");
+    header("Location: /software/BancaVirtual/public/vista/login.html");
 }
-if ($usurol == 'usuario') {
+if ($usurol == 'empleado') {
 ?>
     <!DOCTYPE html>
     <html class="no-js">
     <?php
     include '../../../config/conexionBD.php';
-    $sqlu = "SELECT  tp.per_nombre per_nombre, tp.per_apellido per_apellido , tc.cli_id cli_id, tca.cue_ncuenta cue_ncuenta FROM bv_persona tp, bv_cliente tc , bv_cuenta tca ,bv_transferencia tt WHERE tp.per_id='$codigoui'  and tp.per_id = tc.cli_persona and  tc.cli_id = tca.cli_id and tca.cli_id = tt.cli_id;";
+    $sqlu = "SELECT * FROM bv_persona WHERE per_id='$codigoui';";
     $resultu = $conn->query($sqlu);
     $row = $resultu->fetch_assoc();
-    $codigoc = $row["cli_id"];
-    $numeroc = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
     $nombres = $row["per_nombre"];
-    $apellidos = $row["per_apellido"]
-
+    $apellidos = $row["per_apellido"];
+    $sqluu = "SELECT * FROM bv_empleado WHERE emp_persona='$codigoui';";
+    $resultuu = $conn->query($sqluu);
+    $row = $resultuu->fetch_assoc();
+    $codigoempleado = $row["emp_id"];
+    $rol = $row["emp_cargo"];
+    echo "<h1>" . $rol . ": " . $nombres . " " . $apellidos . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codigo: " . $codigoempleado . "</h1>";
+    //echo $codigoempleado;
 
     ?>
 
-    <head>
+    <head runat="server">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>BANQUITO | Inicio</title>
@@ -55,10 +59,6 @@ if ($usurol == 'usuario') {
                 //$('#modal-13').modal({ keyboard: false }).load   // initialized with no keyboard
             });
         </script>
-        <script>
-
-
-</script>
         <style>
             .contenedor-slider {
                 margin: auto;
@@ -142,6 +142,59 @@ if ($usurol == 'usuario') {
                 background: #eee;
             }
         </style>
+
+
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>TyroDeveloper</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: "highcharts-pastel.php",
+                    dataType: "json",
+                    contentType: 'application/json',
+                    async: false,
+                    success: function(result) {
+                        var options = {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie',
+                                renderTo: 'pie-chart'
+                            },
+                            title: {
+                                text: ''
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true
+                                    },
+                                    showInLegend: true
+                                }
+                            },
+                            series: [result]
+                        };
+                        var chart = new Highcharts.Chart(options);
+                    }
+                });
+
+            });
+        </script>
+        <style>
+            body {
+                font-family: Verdana;
+            }
+        </style>
     </head>
 
     <body oncontextmenu="return false" style="background-color: #fff">
@@ -160,15 +213,10 @@ if ($usurol == 'usuario') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
-                            
-                        <li class="active"><a href="index.php">Inicio</a></li>
-                        <!-- <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
-                        <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>ader-->
-                        <li><a href="solicitud.php">Solicite su Crédito</a></li>
-                        <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
-                        <li><a href="registrosaccesos.php">Consulta de registros</a></li>
-                        <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
-                        
+                            <li"><a href="indexjc.php">Inicio</a></li>
+                            <li class="active"><a href="pastel.php?>">Grafica</a></li>
+                            <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
+
                         </ul>
                     </div>
                     <!--/.nav-collapse -->
@@ -182,91 +230,19 @@ if ($usurol == 'usuario') {
         <br>
         <br>
         <br>
+
         <br>
         <br>
 
-<section>
-<?php
-echo "<h1>N. de Cuenta: $numeroc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Nombres:  $nombres&nbsp;&nbsp;$apellidos</h1>"
-        ?>
-        <script>
 
-function buscar(){
-    var elemento = document.getElementById("tipo").value;
-   if(elemento == ""){
-       document.getElementById("informacion").innerHTML = "";
-
-   }else{
-       if(window.XMLHttpRequest){
-           xmlhttp = new XMLHttpRequest();
-       }else{
-           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-       }
-       xmlhttp.onreadystatechange = function(){
-        if(this.readState == 4 && this.status == 200){
-            document.getElementById("informacion").innerHTML = this.responseText;
-        }
-       };
-       xmlhttp.open("GET","php/buscar.php?nombres="+elemento,true);
-       xmlhttp.send();
-   }
-   return false;
-}
-
-
-</script>
 
         <!--Services-->
         <section id="services" style="text-align: center">
-            <div class="container" style="text-align: justify">
-                <div class="center gap">
-                    <table id="tbl">
-                        <caption>
-                            <h4>Cuenta de Ahorro</h4>
-                        </caption>
-                        <tr>
-                            <th> FECHA Y HORA DE REGISTRO</th>
-                            <th>TIPO DE ACCESO</th>
-                        </tr>
-                        <div id="informacion"><h2>Resultados</h2></div>
-                        <?php
-
-                        include '../../../config/conexionBD.php';
-                        $q = $_POST["txttipo"];
-
-                        $sql = "SELECT tr.reac_fecha, tr.reac_tipo from bv_persona tp,bv_cliente tcl,bv_cuenta tca , bv_registrosacceso tr where tp.per_id = tcl.cli_persona and tcl.cli_id = tca.cli_id and tca.cue_ncuenta ='$numeroc' and tca.cue_ncuenta = tr.reac_cueA_id  and tr.reac_tipo='$q' ORDER BY tr.reac_fecha DESC;";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $fecha = $row["reac_fecha"];
-                                $tipoac = $row["reac_tipo"];
-                                echo "<tr>";
-                                echo " <td>" . $fecha . "</td>";
-                               
-                                echo " <td>" . $tipoac . "</td>";
-                            }
-                        } else {
-                            echo "<tr>";
-                            echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
-                            echo "</tr>";
-                        }
-                        $conn->close();
-                        ?>
-                    </table>
-                
+            <form id="frmChart" runat="server">
+                <div>
+                    <div id="pie-chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
                 </div>
-
-                <div class="row-fluid">
-
-                </div>
-
-                <div class="gap">
-
-                </div>
-
-
-            </div>
+            </form>
 
         </section>
         <br>

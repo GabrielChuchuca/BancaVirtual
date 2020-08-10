@@ -160,12 +160,13 @@ if ($usurol == 'usuario') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
-                            <li class="active"><a href="index.php">Inicio</a></li>
+                        <li><a href="index.php">Inicio</a></li>
                         <!-- <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
                         <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>ader-->
-                        
+                        <li><a href="calCredito.php">Crédito</a></li>
+                        <li><a href="solicitud.php">Solicite su Crédito</a></li>
                         <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
-                        <li><a href="registrosaccesos.php">Consulta de registros</a></li>
+                        <li class="active"><a href="registrosaccesos.php">Consulta de registros</a></li>
                         
                         <li><a href="../../../index.html">Cerrar Sesion</a></li>
                         
@@ -206,7 +207,7 @@ echo "<h1>N. de Cuenta: $numeroc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <th>
                 <div>
                     <h3>ORDENAR POR :</h3>
-                    <select id="tipo" name="tipo"onchange="buscar();" >
+                    <select id="tipo" name="tipo" onchange="buscar();" >
                         <option value="SELECIONE">SELECIONE</option>
                         <option value="FALLIDO">FALLIDO</option>
                         <option value="EXITOSO">EXITOSO</option>

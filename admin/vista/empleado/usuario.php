@@ -43,9 +43,7 @@
                 <br>
                 <label for='numero'>Numero De Cuenta</label>
                 <input type='text' id='numero' name='numero' value='$cue_numcuenta' disabled=»disabled» />
-                <span id='mensajenumero' class='error'></span>
-                <br>
-            ";
+                <span id='mensajenumero' class='error'></span>";
         }else{
             echo "<tr>";
             echo " <td colspan='7'> No existe una cuenta para este usuario </td>";

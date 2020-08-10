@@ -159,10 +159,12 @@ if ($usurol == 'usuario') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
-                        <li class="active"><a href="index.php">Inicio</a></li>
+                        <li><a href="index.php">Inicio</a></li>
+                        <li><a href="calCredito.php">Crédito</a></li>
                        <!-- <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
                         <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>ader-->
-                        <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
+                        <li><a href="solicitud.php">Solicite su Crédito</a></li>
+                        <li class="active"><a href="estadocuenta.php">Consulte su Cuenta</a></li>
                         <li><a href="registrosaccesos.php">Consulta de registros</a></li>
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 

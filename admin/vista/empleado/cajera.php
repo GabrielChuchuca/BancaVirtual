@@ -106,20 +106,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
+                <?php 
+
+include '../../../config/conexionBD.php';
+$codigoempleado = $_GET["codigoempleado"];
+//$conn->close();
+?>
+  
                 <a id="logo" class="pull-left" href="index.html"></a>
                 <div class="nav-collapse collapse pull-right">
                     <ul class="nav">
                     <li><a href="index.php">Inicio</a></li>
-                        <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
-                          
+                    <li class="active"><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>     
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
-                        <?php 
-
-        include '../../../config/conexionBD.php';
-        $codigoempleado = $_GET["codigoempleado"];
-        //$conn->close();
-      ?>
-                    </ul>
+                            </ul>
                 </div>
                 <!--/.nav-collapse -->
             </div>
@@ -130,6 +130,21 @@
     <br>
     <br>
     <br>
+    <div>
+    <?php 
+
+        include '../../../config/conexionBD.php';
+        $codigoempleado = $_GET["codigoempleado"]; 
+        $sqlu = "SELECT p.per_nombre nombre,  p.per_apellido apellido,  e.emp_cargo cargo  FROM bv_persona p, bv_empleado e where p.per_id = e.emp_persona and  emp_id=$codigoempleado;";
+        $resultu = $conn->query($sqlu);
+        $row = $resultu->fetch_assoc();
+        $nombres = $row["nombre"];
+         $apellidos = $row["apellido"];
+         $rol = $row["cargo"];
+         echo "<h1>".$rol. ": " . $nombres . " " . $apellidos."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codigo: " . $codigoempleado."</h1>";
+       
+        //$conn->close();
+      ?></div>
     <br>
     <br>
     
@@ -141,14 +156,26 @@
                     <div class=" parte1">
                         <label for="cedula">Cedula</label>
                         <input type="text" id="cedula" name="cedula" value="" />
+                        
                         <input type="hidden" id="codigoempleado" name="codigoempleado" value="<?php echo $codigoempleado;?>"/>
                         <span id="mensajeCedula" class="error"> </span>
                         <br>
-
                         <input type="button" id="buscar" name="buscar" value="Buscar Usuario"
-                            onclick="return buscarUsuario()" />
+                            onclick="return buscarUsuario()" />   
                         <br>
                         <div id="informacion"></div>
+                        <script>
+
+        function validart(){
+            var mont = document.getElementById('total').value;
+            var montra = document.getElementById('ValorRetiro').value;
+            if(montra > mont){
+                alert('No se puede realisar esta transaccion');
+                document.getElementById("ValorRetiro").value=""; 
+            }
+            return false;
+        }
+       </script>
                         <a href='index.php'><input type='button' value='Volver'></a>
                         <input type="button" value="Retiro" onclick="return retiro()" />
                         <input type="button" value="Deposito" onclick="return deposito()" />

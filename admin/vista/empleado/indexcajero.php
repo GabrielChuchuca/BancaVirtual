@@ -7,7 +7,7 @@ $usurol = $_SESSION['rol'];
 if (!isset($_SESSION['isLogged']) || $_SESSION['isLogged'] === FALSE) {
     header("Location: /software/BancaVirtual/public/vista/login.html");
 }
-if ($usurol == 'usuario') {
+if ($usurol == 'empleado') {
 ?>
     <!DOCTYPE html>
     <html class="no-js">
@@ -18,6 +18,13 @@ if ($usurol == 'usuario') {
     $row = $resultu->fetch_assoc();
     $nombres = $row["per_nombre"];
     $apellidos = $row["per_apellido"];
+    $sqluu = "SELECT * FROM bv_empleado WHERE emp_persona='$codigoui';";
+    $resultuu = $conn->query($sqluu);
+    $row = $resultuu->fetch_assoc();
+    $codigoempleado = $row["emp_id"];
+    $rol = $row["emp_cargo"];
+    echo "<h1>".$rol. ": " . $nombres . " " . $apellidos."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codigo: " . $codigoempleado."</h1>";
+    //echo $codigoempleado;
 
     ?>
 
@@ -154,10 +161,7 @@ if ($usurol == 'usuario') {
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
                         <li class="active"><a href="index.php">Inicio</a></li>
-                        <li><a href="calCredito.php">Crédito</a></li>
-                        <li><a href="solicitud.php">Solicite su Crédito</a></li>
-                        <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
-                        <li><a href="registrosaccesos.php">Consulta de registros</a></li>
+                        <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 
                         </ul>
@@ -172,59 +176,58 @@ if ($usurol == 'usuario') {
         <!--Slider-->
         <br>
         <br>
-        
-        <?php
-    include '../../../config/conexionBD.php';
-    $sql0 = "SELECT * FROM bv_cliente WHERE cli_persona='$codigoui';";
-    $result1 = $conn->query($sql0);
-    $row = $result1->fetch_assoc();
-    $id = $row["cli_id"];
+        <br>
 
-    $sql6 = "SELECT * FROM bv_cuenta WHERE cli_id='$id';";
-    $result2 = $conn->query($sql6);
-    $row = $result2->fetch_assoc();
-    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
-    $saldo = $row["cue_saldo"];
-    
-    
-    echo "<h1> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USUARIO: ".$nombres."  ".$apellidos."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#Cuenta: ".$cuenta."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saldo actual: ".$saldo." </h1>";
-    
-        
-
-    
-
-    ?>
+        <br>
+        <br>
 
 
 
         <!--Services-->
         <section id="services" style="text-align: center">
-            <div class="container" style="text-align: justify; overflow:scroll;height:400px;">
+            <div class="container" style="text-align: justify">
                 <div class="center gap">
                     <table id="tbl">
                         <caption>
-                            <h4>Cuenta de Ahorro</h4>
+                            <h4>Lista de Usuarios</h4>
                         </caption>
                         <tr>
-                            <th># Cuenta</th>
-                            <th>Propietario</th>
-                            <th>Fecha ultima transaccion</th>
-                            <th>saldo</th>
+                            <th># CUENTA</th>
+                            <th>PROPIETARIO</th>
+                            <th>SALDO ACTUAL</th>
                         </tr>
                         <?php
-
-                        $sql = "SELECT * FROM bv_transferencia where cue_ncuenta=$cuenta;";
+                        $sql = "SELECT * FROM bv_persona where per_rol='usuario';";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                $f_tran = $row["tra_fecha"];
-                                $m_tran = $row["tra_monto"];
-                                echo "<tr>";
-                                echo " <td>" . $cuenta . "</td>";
-                                echo " <td>" . $nombres . " " . $apellidos. "</td>";   
-                                echo " <td>" . $f_tran. "</td>";  
-                                echo " <td>" . $m_tran. "</td>";   
-                                echo "</tr>";
+                                $codigo = $row["per_id"];
+                                $cedula = $row["per_cedula"];
+                                $nombres = $row["per_nombre"];
+                                $apellidos = $row["per_apellido"];
+                                $direccion = $row["per_direccion"];
+                                $sql2 = "SELECT * FROM bv_cliente where cli_persona='$codigo';";
+                                $result2 = $conn->query($sql2);
+                                if ($result2->num_rows > 0) {
+                                    while ($row = $result2->fetch_assoc()) {
+                                        $codigocliente = $row["cli_id"];
+                                        $sql3 = "SELECT * FROM bv_cuenta where cli_id='$codigocliente';";
+                                        $result3 = $conn->query($sql3);
+                                            if ($result3->num_rows > 0) {
+                                                while ($row = $result3->fetch_assoc()) {
+                                                    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
+                                                    $saldoactual = $row["cue_saldo"];
+                                                    echo "<tr>";
+                                                    echo " <td>" . $cuenta . "</td>";
+                                                    echo " <td>" . $nombres . " " . $apellidos. "</td>";   
+                                                    echo " <td>" . $saldoactual . "</td>";    
+                                                    echo "</tr>";
+
+                                                }
+                                            }
+
+                                    }
+                                }
 
                                 /*$telefono = $row["per_telefono"];
                                 $correo = $row["per_correo"];
@@ -251,42 +254,6 @@ if ($usurol == 'usuario') {
                             echo "</tr>";
                         }
                         $conn->close();
-                        /*$sql = "SELECT * FROM bv_persona WHERE NOt per_rol='admin';";
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $codigo = $row["per_id"];
-                                $cedula = $row["per_cedula"];
-                                $nombres = $row["per_nombre"];
-                                $apellidos = $row["per_apellido"];
-                                $direccion = $row["per_direccion"];
-                                $telefono = $row["per_telefono"];
-                                $correo = $row["per_correo"];
-                                $fecha = $row["per_fecha_nac"];
-                                $estado = $row["per_estado_civil"];
-                                $sexo = $row["per_sexo"];
-                                echo "<tr>";
-                                echo " <td>" . $cedula . "</td>";
-                                echo " <td>" . $nombres . "</td>";
-                                echo " <td>" . $apellidos . "</td>";
-                                echo " <td>" . $direccion . "</td>";
-                                echo " <td>" . $telefono . "</td>";
-                                echo " <td>" . $correo . "</td>";
-                                $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
-                                echo " <td>" . $fecha . "</td>";
-                                echo " <td>" . $estado . "</td>";
-                                echo " <td>" . $sexo . "</td>";
-                                echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
-                                echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
-                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr>";
-                            echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
-                            echo "</tr>";
-                        }
-                        $conn->close();*/
                         ?>
                     </table>
                 </div>
@@ -295,48 +262,13 @@ if ($usurol == 'usuario') {
 
                 </div>
 
-                
+                <div class="gap">
+
+                </div>
+
 
             </div>
-            <div class="container" style="text-align: justify; overflow:scroll;height:400px;">
-                <div class="gap">
-                    <table BORDER="2" style="margin: 0 auto; ">
-                    <caption>
-                        <h4>Registro Credito</h4>
-                    </caption>
-                        <tr>
-                            <th># Credito</th>
-                            <th>Cantidad Solicitada</th>
-                            <th>Tiempo Credito</th>
-                            <th>Tipo de Amortizacion</th>
-                            
-                        </tr>
-                        <?php
-                        include '../../../config/conexionBD.php';
-                        $sql5 = "SELECT * from bv_credito WHERE cli_id='$id' AND cred_estado='A';";
-                        $result5 = $conn->query($sql5);
-                        while ($row = mysqli_fetch_array($result5)) {
-                            $id_cred=$row["cred_id"];
-                            $tipo_amorti=$row["cred_tipoa"];
-                            $cantidad_soli=$row["cred_monto"];
-                            $tiempo_mes=$row["cred_meses"];
-                            echo "<tr>";
-                            echo " <td>" . $id_cred . "</td>";
-                            echo " <td>" . $cantidad_soli. "</td>";   
-                            echo " <td>" . $tiempo_mes. "</td>";  
-                            echo " <td>" . $tipo_amorti. "</td>";   
-                            echo "</tr>";
-                            /*<td><?php echo $mostrar['cred_id'] ?></td>
-                            <td><?php echo $mostrar['cred_tipoa'] ?></td>
-                            <td><?php echo $mostrar['cred_cantidadc'] ?></td>
-                            <td><?php echo $mostrar['cred_saldo'] ?></td>
-                            <td><?php echo $mostrar['cred_meses'] ?></td>*/
-                        }
-                        $conn->close();
-                        ?>
-                    </table> 
-                </div>
-            </div>
+
         </section>
         <br>
         <br>

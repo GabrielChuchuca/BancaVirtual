@@ -23,7 +23,7 @@ if ($usurol == 'empleado') {
     $row = $resultuu->fetch_assoc();
     $codigoempleado = $row["emp_id"];
     $rol = $row["emp_cargo"];
-    echo "<h1>".$rol. ": " . $nombres . " " . $apellidos."</h1>";
+    echo "<h1>".$rol. ": " . $nombres . " " . $apellidos."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codigo: " . $codigoempleado."</h1>";
     //echo $codigoempleado;
 
     ?>
@@ -160,9 +160,9 @@ if ($usurol == 'empleado') {
                     <a id="logo" class="pull-left" href="index.html"></a>
                     <div class="nav-collapse collapse pull-right">
                         <ul class="nav">
-                        <li><a href="index.php">Inicio</a></li>
-                        <li><a href="cajera.php?codigoempleado=<?php echo "$codigoempleado";?>">TRANSFERENCIAS</a></li>
-                            <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
+                        <li class="active"><a href="indexjc.php">Inicio</a></li>
+                        <li><a href="pastel.php">Grafica</a></li>
+                        <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
 
                         </ul>
                     </div>
@@ -189,15 +189,22 @@ if ($usurol == 'empleado') {
                 <div class="center gap">
                     <table id="tbl">
                         <caption>
-                            <h4>Lista de Usuarios</h4>
+                            <h4>Lista de Solicitudes de Creditos Recientes</h4>
                         </caption>
                         <tr>
-                            <th># CUENTA</th>
-                            <th>PROPIETARIO</th>
-                            <th>SALDO ACTUAL</th>
+                            <th>ID</th>
+                            <th>CEDULA</th>
+                            <th>CLIENTE</th>
+                            <th>MONTO PEDIDO</th>
+                            <th>MESES</th>
+                            <th>TIPO AMORTIZACION</th>
+                            <th>ESTADO CREDITO</th>
+                            <th>Ver Detalles de Credito</th>
+                            <th>APROBAR</th>
+                            <th>NEGAR</th>
                         </tr>
                         <?php
-                        $sql = "SELECT * FROM bv_persona where per_rol='usuario';";
+                        $sql = "SELECT * FROM bv_persona p, bv_cuenta c, bv_cliente cc ,bv_credito cr where p.per_id = cc.cli_persona and c.cli_id = cc.cli_id and cc.cli_id=cr.cli_id  and p.per_rol='usuario'";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
@@ -206,21 +213,31 @@ if ($usurol == 'empleado') {
                                 $nombres = $row["per_nombre"];
                                 $apellidos = $row["per_apellido"];
                                 $direccion = $row["per_direccion"];
+                                $codigocli = $row["cli_id"];
                                 $sql2 = "SELECT * FROM bv_cliente where cli_persona='$codigo';";
                                 $result2 = $conn->query($sql2);
                                 if ($result2->num_rows > 0) {
                                     while ($row = $result2->fetch_assoc()) {
                                         $codigocliente = $row["cli_id"];
-                                        $sql3 = "SELECT * FROM bv_cuenta where cli_id='$codigocliente';";
+                                        $sql3 = "SELECT * FROM bv_credito where cli_id='$codigocliente';";
                                         $result3 = $conn->query($sql3);
                                             if ($result3->num_rows > 0) {
                                                 while ($row = $result3->fetch_assoc()) {
-                                                    $cuenta = str_pad($row["cue_ncuenta"], 6, 0, STR_PAD_LEFT);
-                                                    $saldoactual = $row["cue_saldo"];
+                                                    $monto_pedido = $row["cred_monto"];
+                                                    $tipo_amor = $row["cred_tipoa"];
+                                                    $mes_tiempo = $row["cred_meses"];
+                                                    $cre_estado= $row["cred_estado"];
                                                     echo "<tr>";
-                                                    echo " <td>" . $cuenta . "</td>";
-                                                    echo " <td>" . $nombres . " " . $apellidos. "</td>";   
-                                                    echo " <td>" . $saldoactual . "</td>";    
+                                                    echo " <td type='text' id='empcodigo' >" . $codigocliente . "</td>";
+                                                    echo " <td>" . $cedula . "</td>";
+                                                    echo " <td>" . $nombres . " " . $apellidos. "</td>"; 
+                                                    echo " <td>" . $monto_pedido . "</td>";
+                                                    echo " <td>" . $mes_tiempo . "</td>"; 
+                                                    echo " <td>" . $tipo_amor . "</td>";  
+                                                    echo " <td>" . $cre_estado . "</td>";  
+                                                    echo " <td><a href=\"versolicitud.php?codigocre=$codigo'&codigocli='$codigocli\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/det.png\"></a></td>";
+                                                    echo "<td><a href=\"actualizar.php?codigoc=$codigocli\"><img  onclick='return aprobar()' height=\"30\" width=\"30\" src=\"../../../public/vista/images/aprobado.jpg\"></a></td>";
+                                                    echo "<td><a href=\"negar.php?codigoc=$codigocli\"><img  onclick='return negar()' height=\"30\" width=\"30\" src=\"../../../public/vista/images/negado.jpg\"></a></td>";
                                                     echo "</tr>";
 
                                                 }
@@ -228,26 +245,9 @@ if ($usurol == 'empleado') {
 
                                     }
                                 }
-
-                                /*$telefono = $row["per_telefono"];
-                                $correo = $row["per_correo"];
-                                $fecha = $row["per_fecha_nac"];
-                                $estado = $row["per_estado_civil"];
-                                $sexo = $row["per_sexo"];*/
-                                
-                                /*echo " <td>" . $telefono . "</td>";
-                                echo " <td>" . $correo . "</td>";
-                                $fecha = date('d/m/Y', strtotime(str_replace('-', '/', $fecha)));
-                                echo " <td>" . $fecha . "</td>";
-                                echo " <td>" . $estado . "</td>";
-                                echo " <td>" . $sexo . "</td>";
-                                echo " <td><a href=\"eliminar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/papelera.png\"></a></td>";
-                                echo " <td><a href=\"actualizar.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/reload.png\"></a></td>";
-                                echo " <td><a href=\"cambiarContrasena.php?codigo=$codigo\"><img height=\"30\" width=\"30\" src=\"../../../public/vista/images/contra.png\"></a></td>";*/
-                                
+    
                             }
-                        }
-                       
+                        }                      
                         else {
                             echo "<tr>";
                             echo " <td colspan='7'> No existen usuarios registrados en el sistema </td>";
@@ -257,17 +257,12 @@ if ($usurol == 'empleado') {
                         ?>
                     </table>
                 </div>
-
                 <div class="row-fluid">
-
                 </div>
-
                 <div class="gap">
-
                 </div>
-
-
             </div>
+         
 
         </section>
         <br>

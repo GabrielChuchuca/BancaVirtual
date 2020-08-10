@@ -163,6 +163,7 @@ if ($usurol == 'usuario') {
                         <li class="active"><a href="index.php">Inicio</a></li>
                        <!-- <li><a href="../../calCredito.php">Calcule su Crédito</a></li>
                         <li><a href="../../solitudCredito.php">Solicite su Crédito</a></li>ader-->
+                        <li><a href="solicitud.php">Solicite su Crédito</a></li>
                         <li><a href="estadocuenta.php">Consulte su Cuenta</a></li>
                         <li><a href="registrosaccesos.php">Consulta de registros</a></li>
                         <li><a href="../../../config/cerrarSesion.php">Cerrar Sesion</a></li>
